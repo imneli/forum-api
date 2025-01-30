@@ -1,7 +1,8 @@
-import { Controller, Post, Body, Get, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Put, Delete, UseGuards } from '@nestjs/common';
 import { User as UserModel } from '@prisma/client';
 import { UserService } from './user.service';
 import { Prisma } from '@prisma/client';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -13,6 +14,7 @@ export class UserController {
       return this.userService.createUser(userData);
     }
 
+    @UseGuards(AuthGuard)
     @Get(':id')
 
     async getUserById(@Param('id') id: string): Promise<UserModel | null> {
@@ -20,6 +22,7 @@ export class UserController {
 
     }
 
+    @UseGuards(AuthGuard)
     @Put(':id')
     async updateUser(
       @Param('id') id: string,
